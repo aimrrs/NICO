@@ -469,11 +469,12 @@ export default function LandingPage() {
                 </div>
               </div>
             ) : (
-              <form
-                action="https://formspree.io/f/YOUR_ENDPOINT_ID"
-                method="POST"
-                className="space-y-4"
-              >
+              <form onSubmit={handleFormSubmit} className="space-y-4">
+                {errorMsg && (
+                  <div className="text-xs text-rose-400 bg-rose-950/50 border border-rose-800/60 rounded-lg p-2.5">
+                    {errorMsg}
+                  </div>
+                )}
                 <div>
                   <label htmlFor="beta-email" className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
                     Developer Email
@@ -483,17 +484,21 @@ export default function LandingPage() {
                     type="email"
                     name="email"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="alex@gmail.com"
-                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-colors font-sans text-sm"
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-colors font-sans text-sm disabled:opacity-50"
                   />
                 </div>
 
                 <button
                   type="submit"
+                  disabled={isLoading}
                   data-umami-event="Submitted Waitlist Email"
-                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 text-slate-950 font-semibold text-sm shadow-lg shadow-cyan-500/25 hover:brightness-110 active:scale-[0.98] transition-all duration-200 flex items-center justify-center space-x-2"
+                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 text-slate-950 font-semibold text-sm shadow-lg shadow-cyan-500/25 hover:brightness-110 active:scale-[0.98] transition-all duration-200 disabled:opacity-60 flex items-center justify-center space-x-2"
                 >
-                  <span>Join Waitlist</span>
+                  {isLoading ? <span>Joining...</span> : <span>Join Waitlist</span>}
                 </button>
               </form>
             )}

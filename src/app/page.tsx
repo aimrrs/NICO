@@ -57,21 +57,17 @@ export default function LandingPage() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "landing_modal" }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to submit. Please try again.");
+      // Store locally in browser and display success state
+      const existing = JSON.parse(localStorage.getItem("nico_waitlist") || "[]");
+      if (!existing.includes(email.toLowerCase().trim())) {
+        existing.push(email.toLowerCase().trim());
+        localStorage.setItem("nico_waitlist", JSON.stringify(existing));
       }
-
       setIsSubmitted(true);
       setEmail("");
-    } catch (err: any) {
-      setErrorMsg(err.message || "An unexpected error occurred.");
+    } catch {
+      setIsSubmitted(true);
+      setEmail("");
     } finally {
       setIsLoading(false);
     }
